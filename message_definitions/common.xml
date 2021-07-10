@@ -7312,12 +7312,21 @@
       <field type="uint8_t" name="msg_pack_size">Number of encoded messages in the pack (not the number of bytes). Allowed range is 1 - 10.</field>
       <field type="uint8_t[250]" name="messages">Concatenation of encoded OpenDroneID messages. Shall be filled with nulls in the unused portion of the field.</field>
     </message>
-
     <message id="229" name="KEY_COMMAND">
      <description>Keyboard char command.</description>
      <field type="uint64_t" name="time_usec" units="us"> </field>
      <field type="char" name="command"> </field>
-   </message>
-
+    </message>
+    <message id="227" name="MPC_INPUTS">
+      <description>MPC inputs.</description>
+      <field type="uint64_t" name="time_usec" units="us"> </field>
+      <field type="float[38]" name="mpc_ref_in"> </field>
+      <field type="float[2]" name="mpc_mo_in"> </field>
+    </message>
+    <message id="228" name="MPC_OUTPUTS">
+      <description>MPC outputs.</description>
+      <field type="uint64_t" name="time_usec" units="us"> </field>
+      <field type="float[2]" name="mpc_mv_out"> </field>
+    </message>
   </messages>
 </mavlink>
