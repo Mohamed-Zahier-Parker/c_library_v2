@@ -7323,5 +7323,17 @@
       <field type="float[3]" name="mp_position">Moving Platform Position</field>
       <field type="float[3]" name="mp_velocity">Moving Platform Velocity</field>
     </message>
+    <message id="227" name="MPC_INPUTS">
+      <description>MPC inputs.</description>
+      <field type="uint64_t" name="time_usec" units="us"> </field>
+      <field type="float[2]" name="mpc_ref_in"> </field>
+      <field type="float[2]" name="mpc_mo_in"> </field>
+      <field type="int32_t" name="state">State machine state</field>
+    </message>
+    <message id="228" name="MPC_OUTPUTS">
+      <description>MPC outputs.</description>
+      <field type="uint64_t" name="time_usec" units="us"> </field>
+      <field type="float[2]" name="mpc_mv_out"> </field>
+    </message>
   </messages>
 </mavlink>
