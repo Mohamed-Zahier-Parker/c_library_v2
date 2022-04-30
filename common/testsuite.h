@@ -13225,12 +13225,15 @@ static void mavlink_test_mpc_inputs(uint8_t system_id, uint8_t component_id, mav
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_mpc_inputs_t packet_in = {
-        93372036854775807ULL,{ 73.0, 74.0 },{ 129.0, 130.0 },963498712
+        93372036854775807ULL,{ 73.0, 74.0 },{ 129.0, 130.0 },963498712,213.0,101,168
     };
     mavlink_mpc_inputs_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         packet1.time_usec = packet_in.time_usec;
         packet1.state = packet_in.state;
+        packet1.grd_vel = packet_in.grd_vel;
+        packet1.ramp_trajectory = packet_in.ramp_trajectory;
+        packet1.mpc_activate = packet_in.mpc_activate;
         
         mav_array_memcpy(packet1.mpc_ref_in, packet_in.mpc_ref_in, sizeof(float)*2);
         mav_array_memcpy(packet1.mpc_mo_in, packet_in.mpc_mo_in, sizeof(float)*2);
@@ -13247,12 +13250,12 @@ static void mavlink_test_mpc_inputs(uint8_t system_id, uint8_t component_id, mav
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_mpc_inputs_pack(system_id, component_id, &msg , packet1.time_usec , packet1.mpc_ref_in , packet1.mpc_mo_in , packet1.state );
+    mavlink_msg_mpc_inputs_pack(system_id, component_id, &msg , packet1.time_usec , packet1.mpc_ref_in , packet1.mpc_mo_in , packet1.state , packet1.grd_vel , packet1.ramp_trajectory , packet1.mpc_activate );
     mavlink_msg_mpc_inputs_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_mpc_inputs_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_usec , packet1.mpc_ref_in , packet1.mpc_mo_in , packet1.state );
+    mavlink_msg_mpc_inputs_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_usec , packet1.mpc_ref_in , packet1.mpc_mo_in , packet1.state , packet1.grd_vel , packet1.ramp_trajectory , packet1.mpc_activate );
     mavlink_msg_mpc_inputs_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -13265,7 +13268,7 @@ static void mavlink_test_mpc_inputs(uint8_t system_id, uint8_t component_id, mav
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_mpc_inputs_send(MAVLINK_COMM_1 , packet1.time_usec , packet1.mpc_ref_in , packet1.mpc_mo_in , packet1.state );
+    mavlink_msg_mpc_inputs_send(MAVLINK_COMM_1 , packet1.time_usec , packet1.mpc_ref_in , packet1.mpc_mo_in , packet1.state , packet1.grd_vel , packet1.ramp_trajectory , packet1.mpc_activate );
     mavlink_msg_mpc_inputs_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
