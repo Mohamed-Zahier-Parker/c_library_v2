@@ -12,15 +12,16 @@ typedef struct __mavlink_mpc_inputs_t {
  float grd_vel; /*<  Ground Speed of UAV*/
  int8_t ramp_trajectory; /*<  Boolean Ramp trajectory tracking(1 or 0)*/
  int8_t mpc_activate; /*<  Boolean mpc activation(1 or 0)*/
+ int8_t mpc_land; /*<  Boolean mpc land(1 or 0)*/
 } mavlink_mpc_inputs_t;
 
-#define MAVLINK_MSG_ID_MPC_INPUTS_LEN 34
-#define MAVLINK_MSG_ID_MPC_INPUTS_MIN_LEN 34
-#define MAVLINK_MSG_ID_227_LEN 34
-#define MAVLINK_MSG_ID_227_MIN_LEN 34
+#define MAVLINK_MSG_ID_MPC_INPUTS_LEN 35
+#define MAVLINK_MSG_ID_MPC_INPUTS_MIN_LEN 35
+#define MAVLINK_MSG_ID_227_LEN 35
+#define MAVLINK_MSG_ID_227_MIN_LEN 35
 
-#define MAVLINK_MSG_ID_MPC_INPUTS_CRC 194
-#define MAVLINK_MSG_ID_227_CRC 194
+#define MAVLINK_MSG_ID_MPC_INPUTS_CRC 39
+#define MAVLINK_MSG_ID_227_CRC 39
 
 #define MAVLINK_MSG_MPC_INPUTS_FIELD_MPC_REF_IN_LEN 2
 #define MAVLINK_MSG_MPC_INPUTS_FIELD_MPC_MO_IN_LEN 2
@@ -29,7 +30,7 @@ typedef struct __mavlink_mpc_inputs_t {
 #define MAVLINK_MESSAGE_INFO_MPC_INPUTS { \
     227, \
     "MPC_INPUTS", \
-    7, \
+    8, \
     {  { "time_usec", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_mpc_inputs_t, time_usec) }, \
          { "mpc_ref_in", NULL, MAVLINK_TYPE_FLOAT, 2, 8, offsetof(mavlink_mpc_inputs_t, mpc_ref_in) }, \
          { "mpc_mo_in", NULL, MAVLINK_TYPE_FLOAT, 2, 16, offsetof(mavlink_mpc_inputs_t, mpc_mo_in) }, \
@@ -37,12 +38,13 @@ typedef struct __mavlink_mpc_inputs_t {
          { "grd_vel", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_mpc_inputs_t, grd_vel) }, \
          { "ramp_trajectory", NULL, MAVLINK_TYPE_INT8_T, 0, 32, offsetof(mavlink_mpc_inputs_t, ramp_trajectory) }, \
          { "mpc_activate", NULL, MAVLINK_TYPE_INT8_T, 0, 33, offsetof(mavlink_mpc_inputs_t, mpc_activate) }, \
+         { "mpc_land", NULL, MAVLINK_TYPE_INT8_T, 0, 34, offsetof(mavlink_mpc_inputs_t, mpc_land) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_MPC_INPUTS { \
     "MPC_INPUTS", \
-    7, \
+    8, \
     {  { "time_usec", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_mpc_inputs_t, time_usec) }, \
          { "mpc_ref_in", NULL, MAVLINK_TYPE_FLOAT, 2, 8, offsetof(mavlink_mpc_inputs_t, mpc_ref_in) }, \
          { "mpc_mo_in", NULL, MAVLINK_TYPE_FLOAT, 2, 16, offsetof(mavlink_mpc_inputs_t, mpc_mo_in) }, \
@@ -50,6 +52,7 @@ typedef struct __mavlink_mpc_inputs_t {
          { "grd_vel", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_mpc_inputs_t, grd_vel) }, \
          { "ramp_trajectory", NULL, MAVLINK_TYPE_INT8_T, 0, 32, offsetof(mavlink_mpc_inputs_t, ramp_trajectory) }, \
          { "mpc_activate", NULL, MAVLINK_TYPE_INT8_T, 0, 33, offsetof(mavlink_mpc_inputs_t, mpc_activate) }, \
+         { "mpc_land", NULL, MAVLINK_TYPE_INT8_T, 0, 34, offsetof(mavlink_mpc_inputs_t, mpc_land) }, \
          } \
 }
 #endif
@@ -67,10 +70,11 @@ typedef struct __mavlink_mpc_inputs_t {
  * @param grd_vel  Ground Speed of UAV
  * @param ramp_trajectory  Boolean Ramp trajectory tracking(1 or 0)
  * @param mpc_activate  Boolean mpc activation(1 or 0)
+ * @param mpc_land  Boolean mpc land(1 or 0)
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_mpc_inputs_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint64_t time_usec, const float *mpc_ref_in, const float *mpc_mo_in, int32_t state, float grd_vel, int8_t ramp_trajectory, int8_t mpc_activate)
+                               uint64_t time_usec, const float *mpc_ref_in, const float *mpc_mo_in, int32_t state, float grd_vel, int8_t ramp_trajectory, int8_t mpc_activate, int8_t mpc_land)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MPC_INPUTS_LEN];
@@ -79,6 +83,7 @@ static inline uint16_t mavlink_msg_mpc_inputs_pack(uint8_t system_id, uint8_t co
     _mav_put_float(buf, 28, grd_vel);
     _mav_put_int8_t(buf, 32, ramp_trajectory);
     _mav_put_int8_t(buf, 33, mpc_activate);
+    _mav_put_int8_t(buf, 34, mpc_land);
     _mav_put_float_array(buf, 8, mpc_ref_in, 2);
     _mav_put_float_array(buf, 16, mpc_mo_in, 2);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_MPC_INPUTS_LEN);
@@ -89,6 +94,7 @@ static inline uint16_t mavlink_msg_mpc_inputs_pack(uint8_t system_id, uint8_t co
     packet.grd_vel = grd_vel;
     packet.ramp_trajectory = ramp_trajectory;
     packet.mpc_activate = mpc_activate;
+    packet.mpc_land = mpc_land;
     mav_array_memcpy(packet.mpc_ref_in, mpc_ref_in, sizeof(float)*2);
     mav_array_memcpy(packet.mpc_mo_in, mpc_mo_in, sizeof(float)*2);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_MPC_INPUTS_LEN);
@@ -111,11 +117,12 @@ static inline uint16_t mavlink_msg_mpc_inputs_pack(uint8_t system_id, uint8_t co
  * @param grd_vel  Ground Speed of UAV
  * @param ramp_trajectory  Boolean Ramp trajectory tracking(1 or 0)
  * @param mpc_activate  Boolean mpc activation(1 or 0)
+ * @param mpc_land  Boolean mpc land(1 or 0)
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_mpc_inputs_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint64_t time_usec,const float *mpc_ref_in,const float *mpc_mo_in,int32_t state,float grd_vel,int8_t ramp_trajectory,int8_t mpc_activate)
+                                   uint64_t time_usec,const float *mpc_ref_in,const float *mpc_mo_in,int32_t state,float grd_vel,int8_t ramp_trajectory,int8_t mpc_activate,int8_t mpc_land)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MPC_INPUTS_LEN];
@@ -124,6 +131,7 @@ static inline uint16_t mavlink_msg_mpc_inputs_pack_chan(uint8_t system_id, uint8
     _mav_put_float(buf, 28, grd_vel);
     _mav_put_int8_t(buf, 32, ramp_trajectory);
     _mav_put_int8_t(buf, 33, mpc_activate);
+    _mav_put_int8_t(buf, 34, mpc_land);
     _mav_put_float_array(buf, 8, mpc_ref_in, 2);
     _mav_put_float_array(buf, 16, mpc_mo_in, 2);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_MPC_INPUTS_LEN);
@@ -134,6 +142,7 @@ static inline uint16_t mavlink_msg_mpc_inputs_pack_chan(uint8_t system_id, uint8
     packet.grd_vel = grd_vel;
     packet.ramp_trajectory = ramp_trajectory;
     packet.mpc_activate = mpc_activate;
+    packet.mpc_land = mpc_land;
     mav_array_memcpy(packet.mpc_ref_in, mpc_ref_in, sizeof(float)*2);
     mav_array_memcpy(packet.mpc_mo_in, mpc_mo_in, sizeof(float)*2);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_MPC_INPUTS_LEN);
@@ -153,7 +162,7 @@ static inline uint16_t mavlink_msg_mpc_inputs_pack_chan(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_mpc_inputs_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_mpc_inputs_t* mpc_inputs)
 {
-    return mavlink_msg_mpc_inputs_pack(system_id, component_id, msg, mpc_inputs->time_usec, mpc_inputs->mpc_ref_in, mpc_inputs->mpc_mo_in, mpc_inputs->state, mpc_inputs->grd_vel, mpc_inputs->ramp_trajectory, mpc_inputs->mpc_activate);
+    return mavlink_msg_mpc_inputs_pack(system_id, component_id, msg, mpc_inputs->time_usec, mpc_inputs->mpc_ref_in, mpc_inputs->mpc_mo_in, mpc_inputs->state, mpc_inputs->grd_vel, mpc_inputs->ramp_trajectory, mpc_inputs->mpc_activate, mpc_inputs->mpc_land);
 }
 
 /**
@@ -167,7 +176,7 @@ static inline uint16_t mavlink_msg_mpc_inputs_encode(uint8_t system_id, uint8_t 
  */
 static inline uint16_t mavlink_msg_mpc_inputs_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_mpc_inputs_t* mpc_inputs)
 {
-    return mavlink_msg_mpc_inputs_pack_chan(system_id, component_id, chan, msg, mpc_inputs->time_usec, mpc_inputs->mpc_ref_in, mpc_inputs->mpc_mo_in, mpc_inputs->state, mpc_inputs->grd_vel, mpc_inputs->ramp_trajectory, mpc_inputs->mpc_activate);
+    return mavlink_msg_mpc_inputs_pack_chan(system_id, component_id, chan, msg, mpc_inputs->time_usec, mpc_inputs->mpc_ref_in, mpc_inputs->mpc_mo_in, mpc_inputs->state, mpc_inputs->grd_vel, mpc_inputs->ramp_trajectory, mpc_inputs->mpc_activate, mpc_inputs->mpc_land);
 }
 
 /**
@@ -181,10 +190,11 @@ static inline uint16_t mavlink_msg_mpc_inputs_encode_chan(uint8_t system_id, uin
  * @param grd_vel  Ground Speed of UAV
  * @param ramp_trajectory  Boolean Ramp trajectory tracking(1 or 0)
  * @param mpc_activate  Boolean mpc activation(1 or 0)
+ * @param mpc_land  Boolean mpc land(1 or 0)
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_mpc_inputs_send(mavlink_channel_t chan, uint64_t time_usec, const float *mpc_ref_in, const float *mpc_mo_in, int32_t state, float grd_vel, int8_t ramp_trajectory, int8_t mpc_activate)
+static inline void mavlink_msg_mpc_inputs_send(mavlink_channel_t chan, uint64_t time_usec, const float *mpc_ref_in, const float *mpc_mo_in, int32_t state, float grd_vel, int8_t ramp_trajectory, int8_t mpc_activate, int8_t mpc_land)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MPC_INPUTS_LEN];
@@ -193,6 +203,7 @@ static inline void mavlink_msg_mpc_inputs_send(mavlink_channel_t chan, uint64_t 
     _mav_put_float(buf, 28, grd_vel);
     _mav_put_int8_t(buf, 32, ramp_trajectory);
     _mav_put_int8_t(buf, 33, mpc_activate);
+    _mav_put_int8_t(buf, 34, mpc_land);
     _mav_put_float_array(buf, 8, mpc_ref_in, 2);
     _mav_put_float_array(buf, 16, mpc_mo_in, 2);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MPC_INPUTS, buf, MAVLINK_MSG_ID_MPC_INPUTS_MIN_LEN, MAVLINK_MSG_ID_MPC_INPUTS_LEN, MAVLINK_MSG_ID_MPC_INPUTS_CRC);
@@ -203,6 +214,7 @@ static inline void mavlink_msg_mpc_inputs_send(mavlink_channel_t chan, uint64_t 
     packet.grd_vel = grd_vel;
     packet.ramp_trajectory = ramp_trajectory;
     packet.mpc_activate = mpc_activate;
+    packet.mpc_land = mpc_land;
     mav_array_memcpy(packet.mpc_ref_in, mpc_ref_in, sizeof(float)*2);
     mav_array_memcpy(packet.mpc_mo_in, mpc_mo_in, sizeof(float)*2);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MPC_INPUTS, (const char *)&packet, MAVLINK_MSG_ID_MPC_INPUTS_MIN_LEN, MAVLINK_MSG_ID_MPC_INPUTS_LEN, MAVLINK_MSG_ID_MPC_INPUTS_CRC);
@@ -217,7 +229,7 @@ static inline void mavlink_msg_mpc_inputs_send(mavlink_channel_t chan, uint64_t 
 static inline void mavlink_msg_mpc_inputs_send_struct(mavlink_channel_t chan, const mavlink_mpc_inputs_t* mpc_inputs)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_mpc_inputs_send(chan, mpc_inputs->time_usec, mpc_inputs->mpc_ref_in, mpc_inputs->mpc_mo_in, mpc_inputs->state, mpc_inputs->grd_vel, mpc_inputs->ramp_trajectory, mpc_inputs->mpc_activate);
+    mavlink_msg_mpc_inputs_send(chan, mpc_inputs->time_usec, mpc_inputs->mpc_ref_in, mpc_inputs->mpc_mo_in, mpc_inputs->state, mpc_inputs->grd_vel, mpc_inputs->ramp_trajectory, mpc_inputs->mpc_activate, mpc_inputs->mpc_land);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MPC_INPUTS, (const char *)mpc_inputs, MAVLINK_MSG_ID_MPC_INPUTS_MIN_LEN, MAVLINK_MSG_ID_MPC_INPUTS_LEN, MAVLINK_MSG_ID_MPC_INPUTS_CRC);
 #endif
@@ -231,7 +243,7 @@ static inline void mavlink_msg_mpc_inputs_send_struct(mavlink_channel_t chan, co
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_mpc_inputs_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t time_usec, const float *mpc_ref_in, const float *mpc_mo_in, int32_t state, float grd_vel, int8_t ramp_trajectory, int8_t mpc_activate)
+static inline void mavlink_msg_mpc_inputs_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t time_usec, const float *mpc_ref_in, const float *mpc_mo_in, int32_t state, float grd_vel, int8_t ramp_trajectory, int8_t mpc_activate, int8_t mpc_land)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -240,6 +252,7 @@ static inline void mavlink_msg_mpc_inputs_send_buf(mavlink_message_t *msgbuf, ma
     _mav_put_float(buf, 28, grd_vel);
     _mav_put_int8_t(buf, 32, ramp_trajectory);
     _mav_put_int8_t(buf, 33, mpc_activate);
+    _mav_put_int8_t(buf, 34, mpc_land);
     _mav_put_float_array(buf, 8, mpc_ref_in, 2);
     _mav_put_float_array(buf, 16, mpc_mo_in, 2);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MPC_INPUTS, buf, MAVLINK_MSG_ID_MPC_INPUTS_MIN_LEN, MAVLINK_MSG_ID_MPC_INPUTS_LEN, MAVLINK_MSG_ID_MPC_INPUTS_CRC);
@@ -250,6 +263,7 @@ static inline void mavlink_msg_mpc_inputs_send_buf(mavlink_message_t *msgbuf, ma
     packet->grd_vel = grd_vel;
     packet->ramp_trajectory = ramp_trajectory;
     packet->mpc_activate = mpc_activate;
+    packet->mpc_land = mpc_land;
     mav_array_memcpy(packet->mpc_ref_in, mpc_ref_in, sizeof(float)*2);
     mav_array_memcpy(packet->mpc_mo_in, mpc_mo_in, sizeof(float)*2);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MPC_INPUTS, (const char *)packet, MAVLINK_MSG_ID_MPC_INPUTS_MIN_LEN, MAVLINK_MSG_ID_MPC_INPUTS_LEN, MAVLINK_MSG_ID_MPC_INPUTS_CRC);
@@ -333,6 +347,16 @@ static inline int8_t mavlink_msg_mpc_inputs_get_mpc_activate(const mavlink_messa
 }
 
 /**
+ * @brief Get field mpc_land from mpc_inputs message
+ *
+ * @return  Boolean mpc land(1 or 0)
+ */
+static inline int8_t mavlink_msg_mpc_inputs_get_mpc_land(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int8_t(msg,  34);
+}
+
+/**
  * @brief Decode a mpc_inputs message into a struct
  *
  * @param msg The message to decode
@@ -348,6 +372,7 @@ static inline void mavlink_msg_mpc_inputs_decode(const mavlink_message_t* msg, m
     mpc_inputs->grd_vel = mavlink_msg_mpc_inputs_get_grd_vel(msg);
     mpc_inputs->ramp_trajectory = mavlink_msg_mpc_inputs_get_ramp_trajectory(msg);
     mpc_inputs->mpc_activate = mavlink_msg_mpc_inputs_get_mpc_activate(msg);
+    mpc_inputs->mpc_land = mavlink_msg_mpc_inputs_get_mpc_land(msg);
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_MPC_INPUTS_LEN? msg->len : MAVLINK_MSG_ID_MPC_INPUTS_LEN;
         memset(mpc_inputs, 0, MAVLINK_MSG_ID_MPC_INPUTS_LEN);

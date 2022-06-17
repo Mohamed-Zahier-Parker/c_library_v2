@@ -6902,6 +6902,7 @@
       <field type="float" name="grd_vel">Ground Speed of UAV</field>
       <field type="int8_t" name="ramp_trajectory">Boolean Ramp trajectory tracking(1 or 0)</field>
       <field type="int8_t" name="mpc_activate">Boolean mpc activation(1 or 0)</field>
+      <field type="int8_t" name="mpc_land">Boolean mpc land(1 or 0)</field>
     </message>
     <message id="228" name="MPC_OUTPUTS">
       <description>MPC outputs.</description>
